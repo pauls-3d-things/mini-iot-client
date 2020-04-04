@@ -23,7 +23,15 @@ void MiniIotClient::connectToWifi() {
       debugStream->println("...");
     }
     WiFi.begin(wifiSsid, wifiPass);
-    delay(wifiWaitDelay);
+
+    // below waits at most wifiWiatDelay millis.
+    unsigned long now = millis();
+    while (now + wifiWaitDelay > millis()) {
+      delay(50);
+      if (WiFi.status() == WL_CONNECTED) {
+        break;
+      }
+    }
   } while (WiFi.status() != WL_CONNECTED);
 }
 
