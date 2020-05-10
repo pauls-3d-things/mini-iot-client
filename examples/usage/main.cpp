@@ -15,6 +15,8 @@ void setup() {
   /* write a file */
   miniIot.save("status.txt", "it works");
   // miniIot.saveWithTimestamp("status.txt", "it works");
+
+  // miniIot.disableWifi(); // turn it back off again
 }
 
 void loop() {

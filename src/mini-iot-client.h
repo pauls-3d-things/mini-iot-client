@@ -23,6 +23,7 @@ class MiniIotClient {
 
   void connectToWifi();
   void checkWifi();
+  void disableWifi();
 
   int save(String filename, String data);
   int saveWithTimestamp(String filename, String data);

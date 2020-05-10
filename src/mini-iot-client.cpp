@@ -44,6 +44,10 @@ void MiniIotClient::checkWifi() {
   }
 }
 
+void MiniIotClient::disableWifi() {
+  WiFI.mode(WIFI_OFF);
+}
+
 int MiniIotClient::postData(String filename, String payload, boolean append, boolean tsprefix) {
   HTTPClient http;
   http.begin(String("http://") + serverHostName          //
