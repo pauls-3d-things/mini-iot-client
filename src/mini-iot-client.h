@@ -2,8 +2,15 @@
 #define MINIIOTCLIENT_H
 
 #include <Arduino.h>
+#if defined(ESP8266)
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
+#elif defined(ESP32)
+#include <HTTPClient.h>
+#include <WiFi.h>
+#else
+#error only esp8266 and esp32 are supported
+#endif
 
 class MiniIotClient {
  private:
@@ -12,6 +19,7 @@ class MiniIotClient {
   const char* wifiSsid;
   const char* wifiPass;
   uint16_t wifiWaitDelay;
+  uint8_t wifiWaitRetries;
   Stream* debugStream;
 
   int postData(String filename, String payload, boolean append, boolean tsprefix);
@@ -19,7 +27,9 @@ class MiniIotClient {
  public:
   MiniIotClient(const char* clientHostName, const char* serverHostName, const char* wifiSsid, const char* wifiPass);
   void setWifiWaitDelay(uint16_t delay);
-  void setDebugStream(Stream * stream);
+  void setDebugStream(Stream* stream);
+  void setWifiWaitRetries(uint8_t retries);
+
 
   void connectToWifi();
   void checkWifi();

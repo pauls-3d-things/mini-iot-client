@@ -7,15 +7,22 @@ MiniIotClient::MiniIotClient(const char* clientHostName, const char* serverHostN
   this->wifiSsid = wifiSsid;
   this->wifiPass = wifiPass;
   this->wifiWaitDelay = 4000;
+  this->wifiWaitRetries = 0;
   this->debugStream = NULL;
 }
 
 void MiniIotClient::setWifiWaitDelay(uint16_t delay) { wifiWaitDelay = delay; }
+void MiniIotClient::setWifiWaitRetries(uint8_t retries) { wifiWaitRetries = retries; }
 void MiniIotClient::setDebugStream(Stream* stream) { debugStream = stream; }
 
 void MiniIotClient::connectToWifi() {
+#if defined(ESP8266)
   WiFi.hostname(clientHostName);
+#elif defined(ESP32)
+  WiFi.setHostname(clientHostName);
+#endif
   WiFi.mode(WIFI_STA);
+  uint16_t retries = 0;
   do {
     if (debugStream != NULL) {
       debugStream->print("Connecting to WiFi ");
@@ -24,7 +31,7 @@ void MiniIotClient::connectToWifi() {
     }
     WiFi.begin(wifiSsid, wifiPass);
 
-    // below waits at most wifiWiatDelay millis.
+    // below waits at most wifiWaitDelay millis.
     unsigned long now = millis();
     while (now + wifiWaitDelay > millis()) {
       delay(50);
@@ -32,7 +39,8 @@ void MiniIotClient::connectToWifi() {
         break;
       }
     }
-  } while (WiFi.status() != WL_CONNECTED);
+    retries++;
+  } while (WiFi.status() != WL_CONNECTED && retries <= wifiWaitRetries);
 }
 
 void MiniIotClient::checkWifi() {
@@ -45,7 +53,8 @@ void MiniIotClient::checkWifi() {
 }
 
 void MiniIotClient::disableWifi() {
-  WiFI.mode(WIFI_OFF);
+  WiFi.disconnect();
+  WiFi.mode(WIFI_OFF);
 }
 
 int MiniIotClient::postData(String filename, String payload, boolean append, boolean tsprefix) {
