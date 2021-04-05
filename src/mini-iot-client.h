@@ -14,13 +14,13 @@
 
 class MiniIotClient {
  private:
+  Stream* debugStream;
   const char* clientHostName;
   const char* serverHostName;
   const char* wifiSsid;
   const char* wifiPass;
   uint16_t wifiWaitDelay;
   uint8_t wifiWaitRetries;
-  Stream* debugStream;
 
   int postData(String filename, String payload, boolean append, boolean tsprefix);
 
