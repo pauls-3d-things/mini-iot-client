@@ -11,10 +11,6 @@ MiniIotClient::MiniIotClient(const char* clientHostName, const char* serverHostN
   this->debugStream = NULL;
 }
 
-void MiniIotClient::setWifiWaitDelay(uint16_t delay) { wifiWaitDelay = delay; }
-void MiniIotClient::setWifiWaitRetries(uint8_t retries) { wifiWaitRetries = retries; }
-void MiniIotClient::setDebugStream(Stream* stream) { debugStream = stream; }
-
 void MiniIotClient::connectToWifi() {
 #if defined(ESP8266)
   WiFi.hostname(clientHostName);

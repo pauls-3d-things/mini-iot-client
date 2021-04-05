@@ -26,9 +26,9 @@ class MiniIotClient {
 
  public:
   MiniIotClient(const char* clientHostName, const char* serverHostName, const char* wifiSsid, const char* wifiPass);
-  void setWifiWaitDelay(uint16_t delay);
-  void setDebugStream(Stream* stream);
-  void setWifiWaitRetries(uint8_t retries);
+  void setWifiWaitDelay(uint16_t delay) { wifiWaitDelay = delay; }
+  void setWifiWaitRetries(uint8_t retries) { wifiWaitRetries = retries; }
+  void setDebugStream(Stream* stream) { debugStream = stream; }
 
 
   void connectToWifi();
